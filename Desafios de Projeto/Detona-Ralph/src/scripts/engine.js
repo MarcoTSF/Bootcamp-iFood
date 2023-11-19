@@ -24,7 +24,7 @@ const state = {
 const startGame = () => {
     state.view.startButton.style.display = 'none';
     state.view.initOption.style.display = 'none';
-    state.actions.timerId = setInterval(randomSquare, 500);
+    state.actions.timerId = setInterval(randomSquare, 700);
     state.actions.countDownTimerId = setInterval(countDown, 1000);
 
     function init() {
@@ -34,15 +34,19 @@ const startGame = () => {
     }
 
     init();
+    playSound("game-start");
 }
 
 const restartGame = () => {
-    window.location.reload(false);
+    playSound("game-over");
+    setTimeout(() => {
+        window.location.reload(false);
+    }, 2500);
 };
 
-function playSound(volume = 1.0) {
-    let audio = new Audio("./src/audios/hit.m4a");
-    audio.volume = volume;
+function playSound(audioName) {
+    let audio = new Audio(`./src/audios/${audioName}.m4a`);
+    audio.volume = 0.2;
     audio.play();
 }
 
@@ -69,8 +73,21 @@ function randomSquare() {
         square.classList.remove("enemy");
     });
 
-    let randomNumber = Math.floor(Math.random() * 9);
-    let randomSquare = state.view.squares[randomNumber];
+    let ultimoNumeroSorteado = -1;
+
+    function gerarNumeroDiferente() {
+        let novoNumero;
+        
+        do {
+            novoNumero = Math.floor(Math.random() * 9);
+        } while (novoNumero === ultimoNumeroSorteado);
+
+        ultimoNumeroSorteado = novoNumero;
+        return novoNumero;
+    }
+
+    let randomIndex = gerarNumeroDiferente();
+    let randomSquare = state.view.squares[randomIndex];
     randomSquare.classList.add("enemy");
 
     state.values.hitPosition = randomSquare.id;
@@ -83,12 +100,11 @@ function addListenerHitBox() {
                 state.values.result++;
                 state.view.score.textContent = state.values.result;
                 state.values.hitPosition = null;
-                playSound(0.1);
+                playSound("hit");
             } else {
                 state.values.lives--;
                 state.view.lives.textContent = state.values.lives;
                 if (state.values.lives <= 0) {
-                    // Se as vidas chegarem a zero, encerrar o jogo
                     clearInterval(state.actions.countDownTimerId);
                     clearInterval(state.actions.timerId);
                     alert("Game Over! Você perdeu todas as vidas. O seu resultado foi: " + state.values.result);

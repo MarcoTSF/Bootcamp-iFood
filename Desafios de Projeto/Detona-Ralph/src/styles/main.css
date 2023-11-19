@@ -51,13 +51,14 @@
     background-color: rgba( 255, 255, 255, 0.35 );
     backdrop-filter: blur( 10px );
     -webkit-backdrop-filter: blur( 10px );
-
+    cursor: url('../images/cursor.png'), auto;
 }
 
 .enemy {
     background-image: url("../images/ralph.png");
     background-size: 200px 200px;
     background-position: center;
+    cursor: url('../images/cursor-click.png'), auto;
 }
 
 .init-option {
