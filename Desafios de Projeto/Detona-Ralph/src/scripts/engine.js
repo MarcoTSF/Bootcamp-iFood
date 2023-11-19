@@ -24,7 +24,7 @@ const state = {
 const startGame = () => {
     state.view.startButton.style.display = 'none';
     state.view.initOption.style.display = 'none';
-    state.actions.timerId = setInterval(randomSquare, 700);
+    state.actions.timerId = setInterval(randomSquare, 500);
     state.actions.countDownTimerId = setInterval(countDown, 1000);
 
     function init() {
